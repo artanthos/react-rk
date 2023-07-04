@@ -1,0 +1,8 @@
+public/*
+dist/
+node_modules/
+build/
+dev/
+.husky
+src/i18n
+.eslintrc
