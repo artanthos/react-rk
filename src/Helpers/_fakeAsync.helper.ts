@@ -1,28 +1,87 @@
-import { lsk } from 'src/Constants';
+import {lsk} from 'src/Constants';
 import taskCollection from 'src/Mocks/tasks.json';
-import { localTime } from './_template.helper';
+import {localTime} from './_template.helper';
 
-const fakeLogin = {
-  accessToken: process.env.VITE_JWT,
-  refreshToken: process.env.VITE_JWT_REFRESH,
+interface Task {
+    id: number;
+    title: string;
+    description: string;
+    createDate: string;
+}
+
+interface FakeLoginResponse {
+    accessToken: string;
+    refreshToken: string;
+}
+
+interface FakeAllTasksResponse {
+    tasks: Task[];
+}
+
+interface FakeAddTaskPayload {
+    title: string;
+    description: string;
+}
+
+interface FakeDeleteTaskPayload {
+    id: number;
+}
+
+interface FakeSearchForTaskByTitlePayload {
+    title: string;
+}
+
+interface FakeGetTaskByIdPayload {
+    id: number;
+}
+
+interface SortByDatePayload {
+    isAsc: boolean;
+    searchTerm: string;
+}
+
+type FakeAsyncType =
+    | 'login'
+    | 'register'
+    | 'getAllTasks'
+    | 'addTask'
+    | 'deleteTask'
+    | 'searchForTaskByTitle'
+    | 'getTaskById'
+    | 'sortAscByDate';
+
+type FakeAsyncPayload =
+    | FakeAddTaskPayload
+    | FakeDeleteTaskPayload
+    | FakeSearchForTaskByTitlePayload
+    | FakeGetTaskByIdPayload
+    | SortByDatePayload
+    | undefined;
+
+const fakeLogin: FakeLoginResponse = {
+  accessToken: import.meta.env.VITE_JWT,
+  refreshToken: import.meta.env.VITE_JWT_REFRESH,
 };
 
-const fakeAllTasks = () => {
+const fakeAllTasks = (): FakeAllTasksResponse => {
   if (!localStorage.getItem(lsk.TASKS)) {
     localStorage.setItem(lsk.TASKS, JSON.stringify(taskCollection.tasks));
     return taskCollection;
   }
 
-  return { tasks: JSON.parse(localStorage.getItem(lsk.TASKS)) };
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
+  return {tasks};
 };
 
-const fakeAddTask = (payload) => {
-  const tasks = JSON.parse(localStorage.getItem(lsk.TASKS));
-  const { title, description } = payload;
-  const newTasks = [
+const fakeAddTask = (payload: FakeAddTaskPayload): Task[] => {
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
+  const {title, description} = payload;
+  const newTasks: Task[] = [
     ...tasks,
     {
-      id: tasks.length + 1,
+      id: Number(tasks[tasks.length - 1].id) + 1,
       title,
       description,
       createDate: localTime,
@@ -32,46 +91,50 @@ const fakeAddTask = (payload) => {
   return newTasks;
 };
 
-const fakeDeleteTask = (payload) => {
-  const tasks = JSON.parse(localStorage.getItem(lsk.TASKS));
-  const { id } = payload;
-  const newTasks = tasks.filter((task) => task.id !== id);
+const fakeDeleteTask = (payload: FakeDeleteTaskPayload): Task[] => {
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
+  const {id} = payload;
+  const newTasks = tasks.filter((task: Task) => task.id !== id);
   localStorage.setItem(lsk.TASKS, JSON.stringify(newTasks));
   return newTasks;
 };
 
-const fakeSearchForTaskByTitle = (payload) => {
-  const tasks = JSON.parse(localStorage.getItem(lsk.TASKS));
-  const { title } = payload;
-  return { tasks: tasks.filter((task) => task.title.toLowerCase().includes(title.toLowerCase())) };
+const fakeSearchForTaskByTitle = (payload: FakeSearchForTaskByTitlePayload): FakeAllTasksResponse => {
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
+  const {title} = payload;
+  return {tasks: tasks.filter((task: Task) => task.title.toLowerCase().includes(title.toLowerCase()))};
 };
 
-const fakeGetTaskById = (payload) => {
-  const tasks = JSON.parse(localStorage.getItem(lsk.TASKS));
-  const { id } = payload;
-  return { task: tasks.find((task) => task.id === id) };
+const fakeGetTaskById = (payload: FakeGetTaskByIdPayload): { task?: Task } => {
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
+  const {id} = payload;
+  return {task: tasks.find((task: Task) => task.id === id)};
 };
 
-const sortByDate = (payload) => {
-  const tasks = JSON.parse(localStorage.getItem(lsk.TASKS));
+const sortByDate = (payload: SortByDatePayload): FakeAllTasksResponse => {
+  const storedTasks = localStorage.getItem(lsk.TASKS);
+  const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
 
-  const { isAsc, searchTerm } = payload;
+  const {isAsc, searchTerm} = payload;
 
   const newTasks = tasks
-    .filter((task) => task.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => {
+    .filter((task: Task) => task.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a: Task, b: Task) => {
       const dateA = new Date(a.createDate);
       const dateB = new Date(b.createDate);
 
       if (isAsc) {
-        return dateA - dateB;
+        return dateA.getTime() - dateB.getTime();
       }
-      return dateB - dateA;
+      return dateB.getTime() - dateA.getTime();
     });
-  return { tasks: newTasks };
+  return {tasks: newTasks};
 };
 
-const determine = ({ asyncType, payload }) => {
+const determine = ({asyncType, payload}: { asyncType: FakeAsyncType; payload: FakeAsyncPayload }) => {
   switch (asyncType) {
   case 'login':
   case 'register':
@@ -79,22 +142,23 @@ const determine = ({ asyncType, payload }) => {
   case 'getAllTasks':
     return fakeAllTasks();
   case 'addTask':
-    return fakeAddTask(payload);
+    return fakeAddTask(payload as FakeAddTaskPayload);
   case 'deleteTask':
-    return fakeDeleteTask(payload);
+    return fakeDeleteTask(payload as FakeDeleteTaskPayload);
   case 'searchForTaskByTitle':
-    return fakeSearchForTaskByTitle(payload);
+    return fakeSearchForTaskByTitle(payload as FakeSearchForTaskByTitlePayload);
   case 'getTaskById':
-    return fakeGetTaskById(payload);
+    return fakeGetTaskById(payload as FakeGetTaskByIdPayload);
   case 'sortAscByDate':
-    return sortByDate(payload);
+    return sortByDate(payload as SortByDatePayload);
   default:
     return null;
   }
 };
 
-const fakeAsync = ({ asyncType, payload }) => new Promise((resolve) => {
-  setTimeout(resolve(determine({ asyncType, payload })), 3000);
-});
-export default fakeAsync;
+const fakeAsync = ({asyncType, payload}: { asyncType: FakeAsyncType; payload: FakeAsyncPayload }) =>
+  new Promise((resolve) => {
+    setTimeout(() => resolve(determine({asyncType, payload})), 100);
+  });
 
+export default fakeAsync;

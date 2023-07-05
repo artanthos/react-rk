@@ -1,35 +1,35 @@
 import React, {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   Container, Row, Col, FormGroup,
 } from 'reactstrap';
 import {
   Button, Heading, Paragraph, Table, TextInput, TasksDeleteModal,
 } from 'src/Components';
-import { formatDate, fakeAsync } from 'src/Helpers';
-import { Sizes, FontWeight, LineHeight } from 'src/Styles/Theme';
-import { deleteTask, hydrateTasks } from 'src/Redux/features/tasks/tasksSlice';
+import {formatDate, fakeAsync} from 'src/Helpers';
+import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
+import {deleteTask, hydrateTasks} from 'src/Redux/features/tasks/tasksSlice';
 import debounce from 'lodash/debounce';
 
-const ApiKeysPage = () => {
+const Homepage = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.tasks.list);
-  const { items = [] } = data;
+  const {items = []} = data;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const list = useMemo(() => items?.map((row) => ({ ...row, createDate: formatDate(row.createDate) })), [items]);
+  const list = useMemo(() => items?.map((row) => ({...row, createDate: formatDate(row.createDate)})), [items]);
 
   const handleGetAllTasks = useCallback(() => {
-    fakeAsync({ asyncType: 'getAllTasks' }).then((answer) => {
-      const { tasks } = answer;
+    fakeAsync({asyncType: 'getAllTasks'}).then((answer) => {
+      const {tasks} = answer;
       dispatch(hydrateTasks({
         tasks,
       }));
@@ -38,8 +38,8 @@ const ApiKeysPage = () => {
   const handleDeleteTask = async () => {
     setModalIsOpen(false);
 
-    fakeAsync({ asyncType: 'deleteTask', payload: { id: selectedTask.id } }).then(() => {
-      dispatch(deleteTask({ id: selectedTask.id }));
+    fakeAsync({asyncType: 'deleteTask', payload: {id: selectedTask.id}}).then(() => {
+      dispatch(deleteTask({id: selectedTask.id}));
     });
     setSelectedTask(null);
   };
@@ -57,9 +57,9 @@ const ApiKeysPage = () => {
     navigate('/new-task');
   };
 
-  const handleSortByDate = ({ isAsc }) => () => {
-    fakeAsync({ asyncType: 'sortAscByDate', payload: { isAsc, searchTerm } }).then((answer) => {
-      const { tasks } = answer;
+  const handleSortByDate = ({isAsc}) => () => {
+    fakeAsync({asyncType: 'sortAscByDate', payload: {isAsc, searchTerm}}).then((answer) => {
+      const {tasks} = answer;
 
       dispatch(hydrateTasks({
         tasks,
@@ -69,8 +69,8 @@ const ApiKeysPage = () => {
 
   const handleSearchByTaskTitleCallback = useCallback(debounce((title) => {
     setSearchTerm(title);
-    fakeAsync({ asyncType: 'searchForTaskByTitle', payload: { title } }).then((answer) => {
-      const { tasks } = answer;
+    fakeAsync({asyncType: 'searchForTaskByTitle', payload: {title}}).then((answer) => {
+      const {tasks} = answer;
       dispatch(hydrateTasks({
         tasks,
       }));
@@ -98,8 +98,9 @@ const ApiKeysPage = () => {
               handleDelete={handleDeleteTask}
             />
           )}
-          <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl} className='mb-4'>
-            My tasks
+          <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl}
+            className='mb-4'>
+                        My tasks
           </Heading>
 
           <Row>
@@ -124,18 +125,18 @@ const ApiKeysPage = () => {
               <Button
                 type='button'
                 isFullWidth
-                onClick={handleSortByDate({ isAsc: true })}
+                onClick={handleSortByDate({isAsc: true})}
               >
-                Sort by date asc
+                                Sort by date asc
               </Button>
             </Col>
             <Col>
               <Button
                 type='button'
                 isFullWidth
-                onClick={handleSortByDate({ isAsc: false })}
+                onClick={handleSortByDate({isAsc: false})}
               >
-                Sort by date desc
+                                Sort by date desc
               </Button>
             </Col>
           </Row>
@@ -174,7 +175,7 @@ const ApiKeysPage = () => {
             isFullWidth={false}
             onClick={handleRedirectToNew}
           >
-            Create New Task
+                        Create New Task
           </Button>
 
         </Col>
@@ -183,4 +184,4 @@ const ApiKeysPage = () => {
   );
 };
 
-export default ApiKeysPage;
+export default Homepage;

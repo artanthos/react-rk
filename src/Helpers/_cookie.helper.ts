@@ -1,9 +1,9 @@
-export const setCookie = (name, value, days = 1) => {
+export const setCookie = (name: string, value: string, days = 1): void => {
   let expires = '';
 
   if (days) {
     const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     expires = `; expires=${date.toUTCString()}`;
   } else {
     expires = '';
@@ -12,7 +12,7 @@ export const setCookie = (name, value, days = 1) => {
   document.cookie = `${name}=${value}${expires}; path=/`;
 };
 
-export const retrieveCookie = (name) => {
+export const retrieveCookie = (name: string): string | null => {
   if (name) {
     const nameEQ = `${name}=`;
     const ca = document.cookie.split(';');
@@ -35,6 +35,6 @@ export const retrieveCookie = (name) => {
   return null;
 };
 
-export const deleteCookie = (name) => {
+export const deleteCookie = (name: string): void => {
   setCookie(name, '', -1);
 };
