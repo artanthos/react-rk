@@ -5,7 +5,6 @@ export const StyledIcon = styled.span`
   font-size: ${(props) => props.size}rem;
   line-height: ${(props) => props.size}rem;
   color: ${(props) => props.color};
-  ${(props) => props.isInverted && 'transform: scaleX(-1);'}
 
   &.pointer {
     cursor: pointer;

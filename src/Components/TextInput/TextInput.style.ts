@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Sizes, Colors, FontWeight } from 'src/Styles/Theme';
+import {Sizes, Colors, FontWeight} from 'src/Styles/Theme';
 
 export const StyledInputWrapper = styled.div`
   & > div {

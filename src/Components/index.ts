@@ -6,7 +6,6 @@ import Icon from './Icon';
 import InlineErrorList from './InlineErrorList';
 import Link from './Link';
 import Loading from './Loading';
-import MessageBox from './MessageBox';
 import Modal from './Modal';
 import Navigation from './Navigation';
 import Table from './Table';
@@ -23,7 +22,6 @@ export {
   InlineErrorList,
   Navigation,
   Table,
-  MessageBox,
   Modal,
   Loading,
   Footer,

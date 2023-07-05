@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, InlineErrorList } from 'src/Components';
-import { Colors, Sizes } from 'src/Styles/Theme';
+import {Icon, InlineErrorList} from 'src/Components';
+import {Colors, Sizes} from 'src/Styles/Theme';
 import {
   StyledInputWrapper,
   StyledTextarea,
@@ -18,7 +18,7 @@ const TextInput = (props) => {
   let errors = [...receivedErrors];
 
   if (formik && formik.touched[name] && formik.errors[name]) {
-    errors = [...errors, { name, message: formik.errors[name] }];
+    errors = [...errors, {name, message: formik.errors[name]}];
   }
 
   const getInputFieldClassNames = () => {
@@ -56,7 +56,8 @@ const TextInput = (props) => {
             maxLength={maxLength}
             {...rest}
             hasSuffixIcon={handleShowPassword}
-            multiline
+            // eslint-disable-next-line
+                        multiline
           />
         ) : (
           <StyledInput
@@ -69,7 +70,8 @@ const TextInput = (props) => {
             onChange={formik ? formik.handleChange : onChange}
             {...rest}
             hasSuffixIcon={handleShowPassword}
-            multiline
+            // eslint-disable-next-line
+                        multiline
           />
         )}
 
@@ -83,7 +85,7 @@ const TextInput = (props) => {
           />
         )}
       </div>
-      {errors.length > 0 && <InlineErrorList errors={errors} />}
+      {errors.length > 0 && <InlineErrorList errors={errors}/>}
     </StyledInputWrapper>
   );
 };
