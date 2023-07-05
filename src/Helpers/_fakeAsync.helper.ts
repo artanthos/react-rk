@@ -77,8 +77,6 @@ const fakeAllTasks = (): FakeAllTasksResponse => {
 const fakeAddTask = (payload: FakeAddTaskPayload): Task[] => {
   const storedTasks = localStorage.getItem(lsk.TASKS);
   const tasks = storedTasks ? JSON.parse(storedTasks) : [] as Task[];
-  // eslint-disable-next-line no-console
-  console.log(tasks)
   const {title, description} = payload;
   const newTasks: Task[] = [
     ...tasks,

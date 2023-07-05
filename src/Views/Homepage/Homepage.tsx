@@ -45,8 +45,6 @@ const Homepage = () => {
   };
 
   const handlePrepareDelete = (id) => (e) => {
-    // eslint-disable-next-line no-console
-    console.log(id)
     e.preventDefault();
 
     setSelectedTask(list.find((row) => row.id === id));
