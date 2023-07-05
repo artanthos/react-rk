@@ -1,13 +1,13 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { Footer } from 'src/Components';
-import { PublicLayoutWrapper } from './Public.style';
+import React, {memo} from 'react';
+import {Outlet} from 'react-router-dom';
+import {Footer} from 'src/Components';
+import {PublicLayoutWrapper} from './Public.style';
 
-const PublicLayout = () => (
+const PublicLayout: React.FC = () => (
   <PublicLayoutWrapper className='d-flex flex-column min-vh-100'>
-    <Outlet className='mt-5 h-100' />
-    <Footer />
+    <Outlet/>
+    <Footer/>
   </PublicLayoutWrapper>
 );
 
-export default PublicLayout;
+export default memo(PublicLayout);

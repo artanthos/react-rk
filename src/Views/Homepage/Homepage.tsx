@@ -7,7 +7,7 @@ import {
   Container, Row, Col, FormGroup,
 } from 'reactstrap';
 import {
-  Button, Heading, Paragraph, Table, TextInput, TasksDeleteModal,
+  Button, Heading, Table, TextInput, TasksDeleteModal,
 } from 'src/Components';
 import {formatDate, fakeAsync} from 'src/Helpers';
 import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
@@ -166,7 +166,7 @@ const Homepage = () => {
               body={list}
             />
           ) : (
-            <Paragraph type='p' fontSize={Sizes.default} className='mb-4'>No tasks found.</Paragraph>
+            <p>No tasks found.</p>
           )}
 
 

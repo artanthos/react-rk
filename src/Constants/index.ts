@@ -1,5 +1,6 @@
+export type UserRoleTypes = 'ROLE_ADMIN' | 'ROLE_USER';
+
 export const lsk = {
-  LOCALE: 'locale',
   TASKS: 'tasks',
 };
 
