@@ -1,42 +1,31 @@
-import {
-  Button,
-  Heading,
-  Link,
-  TextInput,
-} from 'src/Components';
-
-import {RegisterValidationSchema} from 'src/Schemas';
-import {FontWeight, LineHeight, Sizes} from 'src/Styles/Theme';
-import {useFormik} from 'formik';
 import React, {useEffect, useState} from 'react';
+import {useFormik} from 'formik';
 import {useSelector} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import {
-  Col,
-  Container,
-  Form, FormGroup,
-  Row,
-} from 'reactstrap';
+import {Col, Container, Form, FormGroup, Row} from 'reactstrap';
+import {Button, Heading, Link, TextInput} from 'src/Components';
+import {RegisterValidationSchema} from 'src/Schemas';
+import {FontWeight, LineHeight, Sizes} from 'src/Styles/Theme';
 import {fakeAsync} from 'src/Helpers';
+import {FakeRegisterPayload} from 'src/Helpers/_fakeAsync.helper';
 import {useAuthContext} from 'src/Hooks';
+import {AuthState} from 'src/Redux/features/auth/authSlice.ts';
 
-
-const Register = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
-  const {userId} = useSelector((state) => state.auth);
-  const {
-    login,
-  } = useAuthContext();
+  const {userId} = useSelector((state: AuthState) => state.auth);
+  const {login} = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
-
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
 
-  const handleSubmitRegister = () => {
-    fakeAsync({asyncType: 'login'}).then(({accessToken, refreshToken}) => {
+  const handleSubmitRegister = (payload: FakeRegisterPayload) => {
+    fakeAsync({
+      asyncType: 'login', payload
+    }).then(({accessToken, refreshToken}) => {
       login({
         accessToken,
         refreshToken,
@@ -54,7 +43,10 @@ const Register = () => {
     },
     validationSchema: RegisterValidationSchema,
     onSubmit: ({
-      firstName, lastName, email, password,
+      firstName,
+      lastName,
+      email,
+      password,
     }) => {
       handleSubmitRegister({
         firstName,
@@ -76,8 +68,14 @@ const Register = () => {
       <Row>
         <Col xl='6' className='px-3 ps-xl-0 pe-xl-3'>
           <>
-            <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl}
-              className='mb-5' useHorizontalSpacer>
+            <Heading
+              type='h2'
+              fontSize={Sizes.xxxl}
+              fontWeight={FontWeight.bold}
+              lineHeight={LineHeight.xl}
+              className='mb-5'
+              useHorizontalSpacer
+            >
                             Sign up
             </Heading>
             <Form onSubmit={formik.handleSubmit}>
@@ -148,7 +146,6 @@ const Register = () => {
             </Form>
           </>
         </Col>
-
       </Row>
     </Container>
   );

@@ -1,53 +1,65 @@
-import React, {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  Container, Row, Col, FormGroup,
+  Container,
+  Row,
+  Col,
+  FormGroup,
 } from 'reactstrap';
 import {
-  Button, Heading, Table, TextInput, TasksDeleteModal,
+  Button,
+  Heading,
+  Table,
+  TextInput,
+  TasksDeleteModal,
 } from 'src/Components';
 import {formatDate, fakeAsync} from 'src/Helpers';
 import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
-import {deleteTask, hydrateTasks} from 'src/Redux/features/tasks/tasksSlice';
+import {deleteTask, hydrateTasks, Task, TasksState} from 'src/Redux/features/tasks/tasksSlice';
 import debounce from 'lodash/debounce';
 
-const Homepage = () => {
+const Homepage: React.FC = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.tasks.list);
+  const data = useSelector((state: TasksState) => state.tasks.list);
   const {items = []} = data;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const list = useMemo(() => items?.map((row) => ({...row, createDate: formatDate(row.createDate)})), [items]);
+  const list = useMemo(
+    () =>
+      items?.map((row: Task) => ({
+        ...row,
+        createDate: formatDate(row.createDate),
+      })),
+    [items]
+  );
 
   const handleGetAllTasks = useCallback(() => {
-    fakeAsync({asyncType: 'getAllTasks'}).then((answer) => {
+    fakeAsync({asyncType: 'getAllTasks', payload: null}).then((answer) => {
       const {tasks} = answer;
-      dispatch(hydrateTasks({
-        tasks,
-      }));
+      dispatch(hydrateTasks({tasks}));
     });
-  }, []);
+  }, [dispatch]);
+
   const handleDeleteTask = async () => {
     setModalIsOpen(false);
 
-    fakeAsync({asyncType: 'deleteTask', payload: {id: selectedTask.id}}).then(() => {
-      dispatch(deleteTask({id: selectedTask.id}));
+    fakeAsync({asyncType: 'deleteTask', payload: {id: selectedTask!.id}}).then(() => {
+      dispatch(deleteTask({id: selectedTask!.id}));
     });
+
     setSelectedTask(null);
   };
 
-  const handlePrepareDelete = (id) => (e) => {
+  const handlePrepareDelete = (id: string) => (e: React.MouseEvent) => {
     e.preventDefault();
 
-    setSelectedTask(list.find((row) => row.id === id));
+    setSelectedTask(list.find((row) => row.id === id)!);
     setModalIsOpen(true);
 
     return false;
@@ -57,28 +69,26 @@ const Homepage = () => {
     navigate('/new-task');
   };
 
-  const handleSortByDate = ({isAsc}) => () => {
+  const handleSortByDate = ({isAsc}: { isAsc: boolean }) => () => {
     fakeAsync({asyncType: 'sortAscByDate', payload: {isAsc, searchTerm}}).then((answer) => {
       const {tasks} = answer;
 
-      dispatch(hydrateTasks({
-        tasks,
-      }));
+      dispatch(hydrateTasks({tasks}));
     });
   };
 
-  const handleSearchByTaskTitleCallback = useCallback(debounce((title) => {
-    setSearchTerm(title);
-    fakeAsync({asyncType: 'searchForTaskByTitle', payload: {title}}).then((answer) => {
-      const {tasks} = answer;
-      dispatch(hydrateTasks({
-        tasks,
-      }));
-    });
-  }, 500), []);
+  const handleSearchByTaskTitleCallback = useCallback(
+    debounce((title: string) => {
+      setSearchTerm(title);
+      fakeAsync({asyncType: 'searchForTaskByTitle', payload: {title}}).then((answer) => {
+        const {tasks} = answer;
+        dispatch(hydrateTasks({tasks}));
+      });
+    }, 500),
+    []
+  );
 
-
-  const handleSearchByTaskTitle = (event) => {
+  const handleSearchByTaskTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleSearchByTaskTitleCallback(event.target.value);
   };
 
@@ -98,8 +108,13 @@ const Homepage = () => {
               handleDelete={handleDeleteTask}
             />
           )}
-          <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl}
-            className='mb-4'>
+          <Heading
+            type='h2'
+            fontSize={Sizes.xxxl}
+            fontWeight={FontWeight.bold}
+            lineHeight={LineHeight.xl}
+            className='mb-4'
+          >
                         My tasks
           </Heading>
 
@@ -122,25 +137,16 @@ const Homepage = () => {
 
           <Row>
             <Col>
-              <Button
-                type='button'
-                isFullWidth
-                onClick={handleSortByDate({isAsc: true})}
-              >
+              <Button type='button' isFullWidth onClick={handleSortByDate({isAsc: true})}>
                                 Sort by date asc
               </Button>
             </Col>
             <Col>
-              <Button
-                type='button'
-                isFullWidth
-                onClick={handleSortByDate({isAsc: false})}
-              >
+              <Button type='button' isFullWidth onClick={handleSortByDate({isAsc: false})}>
                                 Sort by date desc
               </Button>
             </Col>
           </Row>
-
 
           {list.length > 0 ? (
             <Table
@@ -169,15 +175,9 @@ const Homepage = () => {
             <p>No tasks found.</p>
           )}
 
-
-          <Button
-            type='submit'
-            isFullWidth={false}
-            onClick={handleRedirectToNew}
-          >
+          <Button type='submit' isFullWidth={false} onClick={handleRedirectToNew}>
                         Create New Task
           </Button>
-
         </Col>
       </Row>
     </Container>

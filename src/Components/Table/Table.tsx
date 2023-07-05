@@ -1,16 +1,37 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Icon } from 'src/Components';
-import { Colors } from 'src/Styles/Theme';
-import { UncontrolledTooltip } from 'reactstrap';
-import { StyledTable } from './Table.style';
+import React, {ReactNode} from 'react';
+import {Icon} from 'src/Components';
+import {Colors} from 'src/Styles/Theme';
+import {UncontrolledTooltip} from 'reactstrap';
+import {StyledTable} from './Table.style';
 
-const Table = (props) => {
+interface TableColumn {
+    [key: string]: string;
+}
+
+interface TableOption {
+    icon: string;
+    field: string;
+    callbackFn?: () => void;
+    tooltip?: boolean;
+    tooltipText?: string;
+    tooltipClassName?: string;
+}
+
+interface TableProps {
+    children?: ReactNode;
+    head?: TableColumn;
+    body?: Record<string, any>[];
+    hasHeader?: boolean;
+    keyColumn?: string;
+    options?: TableOption[];
+    className?: string;
+}
+
+const Table: React.FC<TableProps> = (props) => {
   const {
     children,
-    head = [],
+    head = {},
     body = [],
-    hasStripes = false,
     hasHeader = false,
     keyColumn = 'id',
     options = [],
@@ -19,23 +40,21 @@ const Table = (props) => {
 
   if (children) {
     return (
-      <StyledTable hasOptions={options.length > 0} hasStripes={hasStripes} className={className}>
+      <StyledTable className={className}>
         {children}
       </StyledTable>
     );
   }
 
   return (
-    <StyledTable hasOptions={options.length > 0} hasStripes={hasStripes} className={className}>
+    <StyledTable className={className}>
       {hasHeader && (
         <thead>
           <tr>
-            {
-              Object.keys(head).map((col) => (
-                <th key={`${col}`}>{head[col]}</th>
-              ))
-            }
-            {options.length > 0 && <th width='7%' />}
+            {Object.keys(head).map((col) => (
+              <th key={`${col}`}>{head[col]}</th>
+            ))}
+            {options.length > 0 && <th width='7%'/>}
           </tr>
         </thead>
       )}
@@ -51,34 +70,33 @@ const Table = (props) => {
                 {rowItem}
                 {options.length > 0 && (
                   <td>
-                    {options.map(
-                      (option) => {
-                        const {
-                          icon, field, callbackFn, tooltip = false, tooltipText = '', tooltipClassName = '',
-                        } = option;
-                        return callbackFn && (
-                          <React.Fragment key={icon}>
-                            {(tooltip && tooltipText) && (
-                              <UncontrolledTooltip
-                                placement='right'
-                                target={`${icon}-${row.id}`}
-
-                              >
-                                {tooltipText}
-                              </UncontrolledTooltip>
-                            )}
-                            <Icon
-                              id={`${icon}-${row.id}`}
-                              name={icon}
-                              size={1.11}
-                              color={Colors.darkText}
-                              onClick={callbackFn(row[field])}
-                              className={`${tooltipClassName} bi-gradient pointer me-1 p-1`}
-                            />
-                          </React.Fragment>
-                        );
-                      },
-                    )}
+                    {options.map((option) => {
+                      const {
+                        icon,
+                        field,
+                        callbackFn,
+                        tooltip = false,
+                        tooltipText = '',
+                        tooltipClassName = '',
+                      } = option;
+                      return callbackFn && (
+                        <React.Fragment key={icon}>
+                          {tooltip && tooltipText && (
+                            <UncontrolledTooltip placement='right' target={`${icon}-${row.id}`}>
+                              {tooltipText}
+                            </UncontrolledTooltip>
+                          )}
+                          <Icon
+                            id={`${icon}-${row.id}`}
+                            name={icon}
+                            size={1.11}
+                            color={Colors.darkText}
+                            onClick={() => callbackFn(row[field])}
+                            className={`${tooltipClassName} bi-gradient pointer me-1 p-1`}
+                          />
+                        </React.Fragment>
+                      );
+                    })}
                   </td>
                 )}
               </tr>
@@ -92,18 +110,5 @@ const Table = (props) => {
   );
 };
 
-Table.propTypes = {
-  keyColumn: PropTypes.string,
-  head: PropTypes.object,
-  body: PropTypes.array,
-  options: PropTypes.array,
-};
-
-Table.defaultProps = {
-  keyColumn: 'id',
-  head: {},
-  body: [],
-  options: [],
-};
 
 export default Table;

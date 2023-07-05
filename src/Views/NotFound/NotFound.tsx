@@ -1,10 +1,14 @@
 import React from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
-import { Button, Heading } from 'src/Components';
-import { Colors, Sizes, FontWeight } from 'src/Styles/Theme';
+import {Navigate, useNavigate} from 'react-router-dom';
+import {Container, Row, Col} from 'reactstrap';
+import {Button, Heading} from 'src/Components';
+import {Colors, Sizes, FontWeight} from 'src/Styles/Theme';
 
-const NotFound = ({ shouldRedirect }) => {
+interface NotFoundProps {
+    shouldRedirect: boolean;
+}
+
+const NotFound: React.FC<NotFoundProps> = ({shouldRedirect}) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -12,7 +16,7 @@ const NotFound = ({ shouldRedirect }) => {
   };
 
   if (shouldRedirect === true) {
-    return (<Navigate to='/not-found' />);
+    return (<Navigate to='/not-found'/>);
   }
 
   return (
@@ -29,7 +33,7 @@ const NotFound = ({ shouldRedirect }) => {
               color={Colors.gradientStart}
               className='my-5'
             >
-              404
+                            404
             </Heading>
             <Heading
               type='h2'
@@ -40,7 +44,7 @@ const NotFound = ({ shouldRedirect }) => {
               alignment='center'
               className='my-5'
             >
-              Page Not Found
+                            Page Not Found
             </Heading>
 
             <div className='mt-5'>
@@ -50,7 +54,7 @@ const NotFound = ({ shouldRedirect }) => {
                 onClick={handleBack}
                 className='mt-5 mx-auto'
               >
-                Go back to homepage
+                                Go back to homepage
               </Button>
             </div>
           </div>
