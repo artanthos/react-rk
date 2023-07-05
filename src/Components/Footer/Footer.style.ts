@@ -1,11 +1,11 @@
-/* eslint-disable max-len */
 import styled from 'styled-components';
-import { Container } from 'reactstrap';
-import { Colors, Sizes, FontWeight } from 'src/Styles/Theme';
+import {Container} from 'reactstrap';
+import {Colors, Sizes, FontWeight} from 'src/Styles/Theme';
+import svg from './footer.svg';
 
 export const FooterWrapper = styled.footer`
   height: 312px;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg width='1920' height='312' viewBox='0 0 1920 312' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M0 186L1920 0V312H0V186Z' fill='%23F8F8FD'/%3e%3c/svg%3e");
+  background-image: url("${svg}");
   background-repeat: no-repeat no-repeat;
   background-position: center center;
   background-size: cover;
@@ -41,6 +41,7 @@ export const FooterWrapper = styled.footer`
       padding-bottom: 15px;
       top: 0px;
       color: ${Colors.darkText};
+
       &:after {
         transition: all .2s ease-in-out;
         background: linear-gradient(90deg, #04ECF6 0%, #4591F9 100%);
@@ -58,4 +59,3 @@ export const FooterContainer = styled(Container)`
     padding-bottom: 1rem;
   }
 `;
-

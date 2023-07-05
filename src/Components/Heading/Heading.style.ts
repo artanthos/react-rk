@@ -1,19 +1,28 @@
 import styled from 'styled-components';
-import { Colors, FontWeight } from 'src/Styles/Theme';
+import {Colors, FontWeight} from 'src/Styles/Theme';
 
-export const StyledHeading = styled.div`
-  font-family: 'Plus Jakarta Sans'!important;
+interface StyledHeadingProps {
+    fontSize?: string;
+    alignment?: string;
+    color?: string;
+    textTransform?: string;
+    fontWeight?: string;
+    lineHeight?: string;
+}
+
+export const StyledHeading = styled.div<StyledHeadingProps>`
+  font-family: 'Plus Jakarta Sans' !important;
   width: 100%;
   font-size: ${(props) => props.fontSize};
   text-align: ${(props) => props.alignment || 'left'};
   color: ${(props) => props.color || '#162E4C'};
   text-transform: ${(props) => props.textTransform || 'none'};
   font-weight: ${(props) => props.fontWeight || 'normal'};
-  line-height: ${(props) => props.lineHeight};
   display: flex;
   align-items: center;
   justify-content: ${(props) => props.alignment || 'left'};
   position: relative;
+  line-height: ${(props) => props.lineHeight || '1rem'};
 
   .v-spacer {
     display: inline-block;

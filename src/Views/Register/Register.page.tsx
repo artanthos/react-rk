@@ -2,29 +2,28 @@ import {
   Button,
   Heading,
   Link,
-  Paragraph,
   TextInput,
 } from 'src/Components';
 
-import { RegisterValidationSchema } from 'src/Schemas';
-import { FontWeight, LineHeight, Sizes } from 'src/Styles/Theme';
-import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import {RegisterValidationSchema} from 'src/Schemas';
+import {FontWeight, LineHeight, Sizes} from 'src/Styles/Theme';
+import {useFormik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
 import {
   Col,
   Container,
   Form, FormGroup,
   Row,
 } from 'reactstrap';
-import { fakeAsync } from 'src/Helpers';
-import { useAuthContext } from 'src/Hooks';
+import {fakeAsync} from 'src/Helpers';
+import {useAuthContext} from 'src/Hooks';
 
 
 const Register = () => {
   const navigate = useNavigate();
-  const { userId } = useSelector((state) => state.auth);
+  const {userId} = useSelector((state) => state.auth);
   const {
     login,
   } = useAuthContext();
@@ -37,7 +36,7 @@ const Register = () => {
 
 
   const handleSubmitRegister = () => {
-    fakeAsync({ asyncType: 'login' }).then(({ accessToken, refreshToken }) => {
+    fakeAsync({asyncType: 'login'}).then(({accessToken, refreshToken}) => {
       login({
         accessToken,
         refreshToken,
@@ -77,8 +76,9 @@ const Register = () => {
       <Row>
         <Col xl='6' className='px-3 ps-xl-0 pe-xl-3'>
           <>
-            <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl} className='mb-5' useHorizontalSpacer>
-              Sign up
+            <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl}
+              className='mb-5' useHorizontalSpacer>
+                            Sign up
             </Heading>
             <Form onSubmit={formik.handleSubmit}>
               <FormGroup>
@@ -142,18 +142,8 @@ const Register = () => {
                 </Button>
               </div>
               <div className='pt-5'>
-                <Paragraph
-                  textTransform='uppercase'
-                  type='span'
-                  fontSize={Sizes.default}
-                  fontWeight={FontWeight.bold}
-                  className='pe-1'
-                >
-                  Already have an account?
-                </Paragraph>
-                <Link to='/login' textTransform='uppercase'>
-                  Log In
-                </Link>
+                <p>Already have an account?</p>
+                <Link to='/login'>Log In</Link>
               </div>
             </Form>
           </>

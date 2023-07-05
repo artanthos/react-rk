@@ -1,30 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { StyledIcon } from './Icon.style';
+import {StyledIcon} from './Icon.style';
 
-const Icon = (props) => {
-  const { name, className = '', ...rest } = props;
+interface IconProps {
+    name: string;
+    size?: number;
+    color?: string;
+    hasShadow?: boolean;
+    onClick?: () => void;
+    className?: string;
+}
 
-  return (
-    <StyledIcon {...rest} className={`${name} ${className}`} />
-  );
-};
-
-Icon.propTypes = {
-  name: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  color: PropTypes.string,
-  hasShadow: PropTypes.bool,
-  isInverted: PropTypes.bool,
-  onClick: PropTypes.func,
-};
-
-Icon.defaultProps = {
-  size: 1,
-  color: '#FFFFFF',
-  hasShadow: false,
-  isInverted: false,
-  onClick: undefined,
-};
+const Icon: React.FC<IconProps> = ({
+  name,
+  className = '',
+  ...rest
+}) => (
+  <StyledIcon {...rest} className={`${name} ${className}`}/>
+);
 
 export default Icon;

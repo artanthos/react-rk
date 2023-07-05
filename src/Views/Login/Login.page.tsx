@@ -1,22 +1,22 @@
-import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {useFormik} from 'formik';
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {
   Container, Row, Col, Form, FormGroup,
 } from 'reactstrap';
 import {
-  TextInput, Button, Heading, Paragraph, Link,
+  TextInput, Button, Heading, Link,
 } from 'src/Components';
-import { Sizes, FontWeight, LineHeight } from 'src/Styles/Theme';
+import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
 import {
   fakeAsync,
 } from 'src/Helpers';
-import { LoginValidationSchema } from 'src/Schemas';
-import { useAuthContext } from 'src/Hooks';
+import {LoginValidationSchema} from 'src/Schemas';
+import {useAuthContext} from 'src/Hooks';
 
 const Login = () => {
-  const { userId } = useSelector((state) => state.auth);
+  const {userId} = useSelector((state) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
   const {
@@ -27,7 +27,7 @@ const Login = () => {
 
   const handleSubmitLogin = () => {
     setIsLoading(true);
-    fakeAsync({ asyncType: 'login' }).then(({ accessToken, refreshToken }) => {
+    fakeAsync({asyncType: 'login'}).then(({accessToken, refreshToken}) => {
       setIsLoading(false);
 
       login({
@@ -43,8 +43,8 @@ const Login = () => {
       password: '',
     },
     validationSchema: LoginValidationSchema,
-    onSubmit: ({ email, password }) => {
-      handleSubmitLogin({ email, password });
+    onSubmit: ({email, password}) => {
+      handleSubmitLogin({email, password});
     },
   });
 
@@ -62,8 +62,9 @@ const Login = () => {
     <Container className='pt-5'>
       <Row>
         <Col xl='6' className='px-3 ps-xl-0 pe-xl-3'>
-          <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl} className='mb-5' useHorizontalSpacer>
-            Login
+          <Heading type='h2' fontSize={Sizes.xxxl} fontWeight={FontWeight.bold} lineHeight={LineHeight.xl}
+            className='mb-5' useHorizontalSpacer>
+                        Login
           </Heading>
           <Form onSubmit={formik.handleSubmit}>
             <FormGroup>
@@ -97,18 +98,8 @@ const Login = () => {
               </Button>
             </div>
             <div className='pt-3'>
-              <Paragraph
-                textTransform='uppercase'
-                type='span'
-                fontSize={Sizes.default}
-                fontWeight={FontWeight.bold}
-                className='pe-1'
-              >
-                {'Don\'t have an account yet?'}
-              </Paragraph>
-              <Link to='/register' textTransform='uppercase'>
-                Register here
-              </Link>
+              <p>{'Don\'t have an account yet?'}</p>
+              <Link to='/register'>Register here</Link>
             </div>
           </Form>
         </Col>

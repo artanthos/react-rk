@@ -1,13 +1,18 @@
 import React from 'react';
-import { Spinner } from 'reactstrap';
-import { LoadingWrapper } from './Loading.style';
+import {Spinner} from 'reactstrap';
+import {LoadingWrapper} from './Loading.style';
 
-const Loading = ({
+interface LoadingProps {
+    animation?: string;
+    width: number;
+    height: number;
+    isFullHeight?: boolean;
+}
+
+const Loading: React.FC<LoadingProps> = ({
   animation, width, height, isFullHeight = false,
 }) => (
-  <LoadingWrapper
-    isFullHeight={isFullHeight}
-  >
+  <LoadingWrapper height={isFullHeight ? '100%' : '50vh'}>
     <Spinner
       animation={animation}
       style={{
