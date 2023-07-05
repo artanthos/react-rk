@@ -1,8 +1,11 @@
+import {UserRoleTypes} from 'src/Constants';
+
 interface JwtPayload {
     userId: string | null;
     isAdmin: boolean;
-    roles?: string[];
+    roles?: UserRoleTypes[];
     exp?: number;
+    email: string;
 }
 
 const parseJwt = (token: string): JwtPayload => {

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Colors, Sizes, LineHeight } from 'src/Styles/Theme';
+import {Colors, Sizes, LineHeight} from 'src/Styles/Theme';
 
 export const StyledTable = styled.table`
   width: 100%;
@@ -10,6 +10,7 @@ export const StyledTable = styled.table`
 
   thead {
     color: ${Colors.light};
+
     tr {
       background-color: ${Colors.primary};
       border-radius: 8px;
@@ -39,10 +40,13 @@ export const StyledTable = styled.table`
       }
     }
 
-    ${(props) => props.hasStripes && `
-      tr:nth-child(even) {background: #F2F2F2;}
-      tr:nth-child(odd) {background: #FFFFFF;}
-    `}
+    tr:nth-child(even) {
+      background: #F2F2F2;
+    }
+
+    tr:nth-child(odd) {
+      background: #FFFFFF;
+    }
 
     tr {
       border-bottom: 1px solid #E6E6EA;

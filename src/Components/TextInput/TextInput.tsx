@@ -1,27 +1,55 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Icon, InlineErrorList} from 'src/Components';
-import {Colors, Sizes} from 'src/Styles/Theme';
+import {Colors} from 'src/Styles/Theme';
 import {
   StyledInputWrapper,
   StyledTextarea,
   StyledInput,
   StyledLabel,
 } from './TextInput.style';
+import {FormikProps, FormikValues} from 'formik';
 
-const TextInput = (props) => {
-  const {
-    errors: receivedErrors = [], id, name, type, label, value, onChange, rows, maxLength,
-    formik, disabled, handleShowPassword, isMaxWidth, className = '', ...rest
-  } = props;
+interface TextInputProps {
+    id: string;
+    name: string;
+    type: string;
+    label?: string;
+    value?: string;
+    onChange?: () => void | null;
+    rows?: number;
+    maxLength?: number;
+    formik?: FormikProps<FormikValues> | null;
+    disabled?: boolean;
+    handleShowPassword?: () => void;
+    isMaxWidth?: boolean;
+    className?: string;
+    errors?: { name: string; message: string }[];
+}
 
+const TextInput: React.FC<TextInputProps> = ({
+  errors: receivedErrors = [],
+  id,
+  name,
+  type,
+  label,
+  value,
+  onChange,
+  rows,
+  maxLength,
+  formik,
+  disabled,
+  handleShowPassword,
+  isMaxWidth,
+  className = '',
+  ...rest
+}) => {
   let errors = [...receivedErrors];
 
   if (formik && formik.touched[name] && formik.errors[name]) {
     errors = [...errors, {name, message: formik.errors[name]}];
   }
 
-  const getInputFieldClassNames = () => {
+  const getInputFieldClassNames = (): string => {
     let inputClassName = [' ', className];
 
     if (errors.length > 0) {
@@ -32,7 +60,9 @@ const TextInput = (props) => {
   };
 
   return (
-    <StyledInputWrapper isMaxWidth={isMaxWidth}>
+    <StyledInputWrapper
+      // eslint-disable-next-line
+            isMaxWidth={isMaxWidth}>
       {label && (
         <StyledLabel
           htmlFor={id}
@@ -55,9 +85,9 @@ const TextInput = (props) => {
             rows={rows}
             maxLength={maxLength}
             {...rest}
-            hasSuffixIcon={handleShowPassword}
             // eslint-disable-next-line
-                        multiline
+                        hasSuffixIcon={handleShowPassword}
+            multiline
           />
         ) : (
           <StyledInput
@@ -69,9 +99,9 @@ const TextInput = (props) => {
             value={formik ? formik.values[name] : value}
             onChange={formik ? formik.handleChange : onChange}
             {...rest}
-            hasSuffixIcon={handleShowPassword}
             // eslint-disable-next-line
-                        multiline
+                        hasSuffixIcon={handleShowPassword}
+            multiline
           />
         )}
 
@@ -91,20 +121,3 @@ const TextInput = (props) => {
 };
 
 export default TextInput;
-
-TextInput.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string,
-  fontSize: PropTypes.string,
-  isMaxWidth: PropTypes.bool,
-  errors: PropTypes.array,
-
-};
-
-TextInput.defaultProps = {
-  fontSize: Sizes.default,
-  label: undefined,
-  isMaxWidth: true,
-  errors: [],
-};

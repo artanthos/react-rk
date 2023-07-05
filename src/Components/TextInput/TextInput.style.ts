@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import {Sizes, Colors, FontWeight} from 'src/Styles/Theme';
 
-export const StyledInputWrapper = styled.div`
+interface StyledInputWrapperProps {
+    isMaxWidth?: boolean;
+}
+
+export const StyledInputWrapper = styled.div<StyledInputWrapperProps>`
   & > div {
     position: relative;
     display: flex;
@@ -14,7 +18,12 @@ export const StyledInputWrapper = styled.div`
   }
 `;
 
-export const StyledTextarea = styled.textarea`
+interface StyledTextareaProps {
+    fontSize?: string;
+    hasSuffixIcon?: boolean;
+}
+
+export const StyledTextarea = styled.textarea<StyledTextareaProps>`
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: ${FontWeight.medium};
@@ -48,7 +57,12 @@ export const StyledTextarea = styled.textarea`
   }
 `;
 
-export const StyledInput = styled.input`
+interface StyledInputProps {
+    fontSize?: string;
+    hasSuffixIcon?: boolean;
+}
+
+export const StyledInput = styled.input<StyledInputProps>`
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: ${FontWeight.medium};

@@ -9,7 +9,7 @@ import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {BroadcastLogoutAllTabs} from 'src/Config/auth';
 
-const App = () => {
+const App: React.FC = () => {
   useEffect(() => {
     BroadcastLogoutAllTabs();
   }, []);
@@ -18,10 +18,7 @@ const App = () => {
     <Provider store={store}>
       <AuthProvider>
         <GlobalStyle/>
-        <IntlProvider
-          locale='en'
-          messages={localizations.en}
-        >
+        <IntlProvider locale='en' messages={localizations.en}>
           <BrowserRouter>
             <AppRoutes/>
           </BrowserRouter>

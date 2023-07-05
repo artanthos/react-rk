@@ -2,12 +2,12 @@ import {lsk} from 'src/Constants';
 import taskCollection from 'src/Mocks/tasks.json';
 import {localTime} from './_template.helper';
 
-interface Task {
+export type Task = {
     id: number;
     title: string;
     description: string;
     createDate: string;
-}
+};
 
 interface FakeLoginResponse {
     accessToken: string;
@@ -40,6 +40,13 @@ interface SortByDatePayload {
     searchTerm: string;
 }
 
+export interface FakeRegisterPayload {
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+}
+
 type FakeAsyncType =
     | 'login'
     | 'register'
@@ -56,7 +63,8 @@ type FakeAsyncPayload =
     | FakeSearchForTaskByTitlePayload
     | FakeGetTaskByIdPayload
     | SortByDatePayload
-    | undefined;
+    | FakeRegisterPayload
+    | null;
 
 const fakeLogin: FakeLoginResponse = {
   accessToken: import.meta.env.VITE_JWT,

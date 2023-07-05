@@ -2,32 +2,30 @@ import {useFormik} from 'formik';
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {
-  Container, Row, Col, Form, FormGroup,
-} from 'reactstrap';
-import {
-  TextInput, Button, Heading, Link,
-} from 'src/Components';
+import {Container, Row, Col, Form, FormGroup} from 'reactstrap';
+import {TextInput, Button, Heading, Link} from 'src/Components';
 import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
-import {
-  fakeAsync,
-} from 'src/Helpers';
+import {fakeAsync} from 'src/Helpers';
 import {LoginValidationSchema} from 'src/Schemas';
 import {useAuthContext} from 'src/Hooks';
+import {AuthState} from 'src/Redux/features/auth/authSlice.ts';
+
+interface FormValues {
+    email: string;
+    password: string;
+}
 
 const Login = () => {
-  const {userId} = useSelector((state) => state.auth);
+  const {userId} = useSelector((state: AuthState) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    login,
-  } = useAuthContext();
+  const {login} = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmitLogin = () => {
     setIsLoading(true);
-    fakeAsync({asyncType: 'login'}).then(({accessToken, refreshToken}) => {
+    fakeAsync({asyncType: 'login', payload: null}).then(({accessToken, refreshToken}) => {
       setIsLoading(false);
 
       login({
@@ -37,14 +35,15 @@ const Login = () => {
     });
   };
 
-  const formik = useFormik({
+  const formik = useFormik<FormValues>({
     initialValues: {
       email: '',
       password: '',
     },
     validationSchema: LoginValidationSchema,
-    onSubmit: ({email, password}) => {
-      handleSubmitLogin({email, password});
+    // eslint-disable-next-line
+        onSubmit: ({email, password}) => {
+      handleSubmitLogin();
     },
   });
 
@@ -68,14 +67,8 @@ const Login = () => {
           </Heading>
           <Form onSubmit={formik.handleSubmit}>
             <FormGroup>
-              <TextInput
-                label='Your email:'
-                id='email'
-                name='email'
-                type='text'
-                formik={formik}
-                maxLength={256}
-              />
+              <TextInput label='Your email:' id='email' name='email' type='text' formik={formik}
+                maxLength={256}/>
             </FormGroup>
             <FormGroup>
               <TextInput
@@ -89,11 +82,7 @@ const Login = () => {
               />
             </FormGroup>
             <div>
-              <Button
-                type='submit'
-                disabled={isLoading}
-                isFullWidth={false}
-              >
+              <Button type='submit' disabled={isLoading} isFullWidth={false}>
                 <span>Login</span>
               </Button>
             </div>
