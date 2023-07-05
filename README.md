@@ -1,4 +1,4 @@
-# Light Aqua
+# Light Aqua by [Ravioli Code](https://hashnode.com/@raviolicode)
 
 1. Requests are made with a ```fakeAsync``` helper, inside the ```src/Helpers/fakeAsync.helper.js``` file. This helper is used to simulate the asynchronous behavior of the application for login, register, fetch tasks, add task, sort tasks, search task by title.
 
