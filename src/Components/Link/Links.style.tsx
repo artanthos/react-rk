@@ -1,11 +1,18 @@
-import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { Colors, Sizes } from 'src/Styles/Theme';
+import {Link} from 'react-router-dom';
+import {Colors, Sizes} from 'src/Styles/Theme';
 
-export const StyledLink = styled(({
-  fontSize, textTransform, textDecoration, isBlueColor, ...rest
-}) => <Link {...rest} />)`
+interface StyledLinkProps {
+    fontSize: string;
+    textTransform?: string;
+    textDecoration: boolean;
+    isBlueColor?: boolean;
+    fontWeight?: string;
+}
+
+// eslint-disable-next-line no-unused-vars
+export const StyledLink = styled(({fontSize, textTransform, textDecoration, isBlueColor, ...rest}: StyledLinkProps) =>
+  <Link {...rest} />)`
   display: inline-block;
   font-weight: ${(props) => props.fontWeight || 'normal'};
   font-size: ${(props) => props.fontSize};
@@ -45,4 +52,3 @@ export const StyledLink = styled(({
     }
   `}
 `;
-

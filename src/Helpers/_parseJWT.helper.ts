@@ -1,5 +1,12 @@
-const parseJwt = (token) => {
-  let jsonPayload = JSON.stringify({ userId: null, isAdmin: false });
+interface JwtPayload {
+    userId: string | null;
+    isAdmin: boolean;
+    roles?: string[];
+    exp?: number;
+}
+
+const parseJwt = (token: string): JwtPayload => {
+  let jsonPayload = JSON.stringify({userId: null, isAdmin: false});
 
   try {
     const base64Url = token.split('.')[1];
@@ -8,24 +15,23 @@ const parseJwt = (token) => {
       atob(base64)
         .split('')
         .map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
-        .join(''),
+        .join('')
     );
   } catch (_) {
-    jsonPayload = JSON.stringify({ userId: null, isAdmin: false, roles: [] });
+    jsonPayload = JSON.stringify({userId: null, isAdmin: false, roles: [], exp: 0});
   }
 
   return JSON.parse(jsonPayload);
 };
 
-export const isValidToken = (accessToken) => {
+export const isValidToken = (accessToken: string): boolean => {
   if (!accessToken) {
     return false;
   }
 
   const decoded = parseJwt(accessToken);
   const currentTime = Date.now() / 1000;
-  return decoded.exp > currentTime;
+  return decoded.exp !== undefined && decoded.exp > currentTime;
 };
 
 export default parseJwt;
-

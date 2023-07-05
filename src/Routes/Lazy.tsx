@@ -1,11 +1,11 @@
-import { Loading } from 'src/Components';
-import { UserRoles } from 'src/Constants';
-import React, { Suspense, lazy } from 'react';
+import {Loading} from 'src/Components';
+import {UserRoles} from 'src/Constants';
+import React, {Suspense, lazy} from 'react';
 
 // eslint-disable-next-line
-const Loadable = (Component) => (props) => {
+const Loadable = (Component: any) => (props: any) => {
   return (
-    <Suspense fallback={<Loading width={10} height={10} />}>
+    <Suspense fallback={<Loading animation={null} width={10} height={10}/>}>
       <Component {...props} />
     </Suspense>
   );

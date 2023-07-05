@@ -1,4 +1,4 @@
-const deleteAllCookies = () => {
+const deleteAllCookies = (): void => {
   document.cookie.split(';').forEach((c) => {
     document.cookie = c
       .replace(/^ +/, '')

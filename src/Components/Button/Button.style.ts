@@ -3,7 +3,11 @@ import {
   Sizes, Colors, LineHeight, FontWeight,
 } from 'src/Styles/Theme';
 
-export const StyledButtonLarge = styled.button`
+interface StyledButtonProps {
+    isFullWidth?: boolean;
+}
+
+export const StyledButtonLarge = styled.button<StyledButtonProps>`
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: ${FontWeight.bold};
   font-size: ${Sizes.medium};
@@ -23,14 +27,14 @@ export const StyledButtonLarge = styled.button`
   object-fit: contain;
   border-radius: 100px;
   transition: all .2s ease-in-out;
-  background-image: linear-gradient(to right,#4591f9 0%,#04ecf6 100%);
+  background-image: linear-gradient(to right, #4591f9 0%, #04ecf6 100%);
   box-shadow: none;
   text-shadow: 0px 1px 2px rgba(17, 17, 17, 0.24);
   cursor: pointer;
   text-decoration: none;
 
   &:hover {
-    background-image: linear-gradient(to right,#04ecf6 0%,#4591f9 100%);
+    background-image: linear-gradient(to right, #04ecf6 0%, #4591f9 100%);
     box-shadow: 0 24px 32px 0 rgb(17 17 17 / 16%);
     color: ${Colors.light};
   }
