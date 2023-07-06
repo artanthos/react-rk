@@ -1,13 +1,15 @@
 import React from 'react';
 import {StyledIcon} from './Icon.style';
 
-interface IconProps {
+export interface IconProps {
+    id?: string;
     name: string;
     size?: number;
     color?: string;
     hasShadow?: boolean;
-    onClick?: () => void;
     className?: string;
+    // eslint-disable-next-line no-unused-vars
+    onClick?: (e: React.MouseEvent) => void;
 }
 
 const Icon: React.FC<IconProps> = ({

@@ -1,7 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Icon from 'src/Components/Icon';
-import { StyledButtonLarge, StyledButtonSmall, StyledButtonExtraSmall } from './Button.style';
+import React, {ReactNode, MouseEvent} from 'react';
+import {Icon} from 'src/Components';
+import {StyledButtonLarge, StyledButtonSmall, StyledButtonExtraSmall} from './Button.style';
+import {IconProps} from 'src/Components/Icon/Icon.tsx';
+
+interface ButtonProps {
+    size?: 'lg' | 'sm' | 'xs';
+    type?: 'button' | 'submit' | 'reset';
+    // eslint-disable-next-line no-unused-vars
+    onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+    icon?: IconProps;
+    iconPosition?: 'left' | 'right';
+    href?: string;
+    children: ReactNode;
+    disabled?: boolean;
+    isFullWidth?: boolean;
+    className?: string;
+}
 
 const ButtonTypes = {
   xs: StyledButtonExtraSmall,
@@ -9,11 +23,16 @@ const ButtonTypes = {
   lg: StyledButtonLarge,
 };
 
-const Button = (props) => {
-  const {
-    children, size, type, onClick, icon, iconPosition, href, ...rest
-  } = props;
-
+const Button: React.FC<ButtonProps> = ({
+  size = 'lg',
+  type = 'button',
+  onClick,
+  icon,
+  iconPosition = 'left',
+  href = '',
+  children,
+  ...rest
+}) => {
   const StyledButton = ButtonTypes[size] || StyledButtonLarge;
   const ButtonWithIconChildren = icon && {
     left: (
@@ -30,43 +49,25 @@ const Button = (props) => {
     ),
   };
 
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
   if (href !== '') {
     return (
-      <StyledButton
-        as='a'
-        href={href}
-        {...rest}
-      >
-        {icon ? ButtonWithIconChildren[iconPosition] : children}
+      <StyledButton as='a' href={href} {...rest}>
+        {icon && iconPosition && ButtonWithIconChildren ? ButtonWithIconChildren[iconPosition] : children}
       </StyledButton>
     );
   }
 
   return (
-    <StyledButton
-      type={type}
-      onClick={onClick}
-      {...rest}
-    >
-      {icon ? ButtonWithIconChildren[iconPosition] : children}
+    <StyledButton type={type} onClick={handleClick} {...rest}>
+      {icon && iconPosition && ButtonWithIconChildren ? ButtonWithIconChildren[iconPosition] : children}
     </StyledButton>
   );
-};
-
-Button.propTypes = {
-  size: PropTypes.oneOf(['lg', 'sm', 'xs']),
-  type: PropTypes.oneOf(['button', 'submit', 'reset']),
-  onClick: PropTypes.func,
-  iconPosition: PropTypes.oneOf(['left', 'right']),
-  href: PropTypes.string,
-};
-
-Button.defaultProps = {
-  size: 'lg',
-  type: 'button',
-  onClick: undefined,
-  iconPosition: 'left',
-  href: '',
 };
 
 export default Button;

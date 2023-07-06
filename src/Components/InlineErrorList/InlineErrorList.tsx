@@ -1,11 +1,11 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {InlineErrorListWrapper} from './InlineErrorList.style';
 
 interface InlineErrorListProps {
     errors?: Array<{ message: string }> | string;
 }
 
-const InlineErrorList: FC<InlineErrorListProps> = ({errors = []}) => {
+const InlineErrorList: React.FC<InlineErrorListProps> = ({errors = []}) => {
   return (
     <InlineErrorListWrapper>
       {Array.isArray(errors) ? (

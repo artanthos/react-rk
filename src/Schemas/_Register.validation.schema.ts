@@ -17,8 +17,8 @@ const RegisterValidationSchema = yup.object({
     .min(2, 'Must be minimum 2 characters')
     .max(255, 'Must be max 255 characters'),
   email: yup
-    .string('We need a valid email address')
-    .matches(emailRules, { message: 'We need a valid email address' })
+    .string()
+    .matches(emailRules, {message: 'We need a valid email address'})
     .email('We need a valid email address')
     .required('We need a valid email address')
     .min(5, 'We need a valid email address')

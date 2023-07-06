@@ -7,7 +7,7 @@ import {
   StyledInput,
   StyledLabel,
 } from './TextInput.style';
-import {FormikProps, FormikValues} from 'formik';
+import {FormikConfig, FormikValues} from 'formik';
 
 interface TextInputProps {
     id: string;
@@ -15,16 +15,18 @@ interface TextInputProps {
     type: string;
     label?: string;
     value?: string;
-    onChange?: () => void | null;
+    // eslint-disable-next-line no-unused-vars
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     rows?: number;
     maxLength?: number;
-    formik?: FormikProps<FormikValues> | null;
+    formik?: FormikConfig<FormikValues> | any | null;
     disabled?: boolean;
-    handleShowPassword?: () => void;
+    handleShowPassword?: () => void | null;
     isMaxWidth?: boolean;
     className?: string;
     errors?: { name: string; message: string }[];
 }
+
 
 const TextInput: React.FC<TextInputProps> = ({
   errors: receivedErrors = [],
@@ -37,8 +39,8 @@ const TextInput: React.FC<TextInputProps> = ({
   rows,
   maxLength,
   formik,
-  disabled,
-  handleShowPassword,
+  disabled = false,
+  handleShowPassword = null,
   isMaxWidth,
   className = '',
   ...rest
@@ -61,8 +63,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
   return (
     <StyledInputWrapper
-      // eslint-disable-next-line
-            isMaxWidth={isMaxWidth}>
+      isMaxWidth={isMaxWidth}>
       {label && (
         <StyledLabel
           htmlFor={id}
@@ -85,8 +86,7 @@ const TextInput: React.FC<TextInputProps> = ({
             rows={rows}
             maxLength={maxLength}
             {...rest}
-            // eslint-disable-next-line
-                        hasSuffixIcon={handleShowPassword}
+            hasSuffixIcon={!!handleShowPassword}
             multiline
           />
         ) : (
@@ -99,8 +99,7 @@ const TextInput: React.FC<TextInputProps> = ({
             value={formik ? formik.values[name] : value}
             onChange={formik ? formik.handleChange : onChange}
             {...rest}
-            // eslint-disable-next-line
-                        hasSuffixIcon={handleShowPassword}
+            hasSuffixIcon={!!handleShowPassword}
             multiline
           />
         )}

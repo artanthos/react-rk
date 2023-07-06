@@ -1,6 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {parseJWT} from 'src/Helpers';
-import {UserRoleTypes} from 'src/Constants';
 
 export interface AuthState {
     accessToken: string | null;
@@ -13,9 +12,6 @@ export interface AuthState {
 interface SetTokenPayload {
     accessToken: string;
     refreshToken: string;
-    roles: UserRoleTypes[];
-    userId: string | null;
-    email: string | null;
 }
 
 const initialState: AuthState = {

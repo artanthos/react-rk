@@ -9,12 +9,12 @@ export type Task = {
     createDate: string;
 };
 
-interface FakeLoginResponse {
+export interface FakeLoginResponse {
     accessToken: string;
     refreshToken: string;
 }
 
-interface FakeAllTasksResponse {
+export interface FakeAllTasksResponse {
     tasks: Task[];
 }
 
@@ -164,7 +164,10 @@ const determine = ({asyncType, payload}: { asyncType: FakeAsyncType; payload: Fa
   }
 };
 
-const fakeAsync = ({asyncType, payload}: { asyncType: FakeAsyncType; payload: FakeAsyncPayload }) =>
+const fakeAsync = ({asyncType, payload}: {
+    asyncType: FakeAsyncType;
+    payload: FakeAsyncPayload
+}): Promise<FakeLoginResponse | FakeAllTasksResponse | Task[] | { task?: Task } | null> =>
   new Promise((resolve) => {
     setTimeout(() => resolve(determine({asyncType, payload})), 100);
   });

@@ -11,7 +11,8 @@ interface TableColumn {
 interface TableOption {
     icon: string;
     field: string;
-    callbackFn?: () => void;
+    // eslint-disable-next-line no-unused-vars
+    callbackFn?: (id: string) => void;
     tooltip?: boolean;
     tooltipText?: string;
     tooltipClassName?: string;
@@ -22,6 +23,7 @@ interface TableProps {
     head?: TableColumn;
     body?: Record<string, any>[];
     hasHeader?: boolean;
+    hasOptions?: boolean;
     keyColumn?: string;
     options?: TableOption[];
     className?: string;
@@ -54,7 +56,7 @@ const Table: React.FC<TableProps> = (props) => {
             {Object.keys(head).map((col) => (
               <th key={`${col}`}>{head[col]}</th>
             ))}
-            {options.length > 0 && <th width='7%'/>}
+            {options.length > 0 && <th style={{width: '7%'}}/>}
           </tr>
         </thead>
       )}
@@ -79,6 +81,7 @@ const Table: React.FC<TableProps> = (props) => {
                         tooltipText = '',
                         tooltipClassName = '',
                       } = option;
+
                       return callbackFn && (
                         <React.Fragment key={icon}>
                           {tooltip && tooltipText && (
@@ -91,7 +94,10 @@ const Table: React.FC<TableProps> = (props) => {
                             name={icon}
                             size={1.11}
                             color={Colors.darkText}
-                            onClick={() => callbackFn(row[field])}
+                            onClick={(e: React.MouseEvent) => {
+                              e.preventDefault();
+                              callbackFn(row[field])
+                            }}
                             className={`${tooltipClassName} bi-gradient pointer me-1 p-1`}
                           />
                         </React.Fragment>

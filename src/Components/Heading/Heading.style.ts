@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import {Colors, FontWeight} from 'src/Styles/Theme';
 
 interface StyledHeadingProps {
+    as?: string;
+    fontWeight?: number;
     fontSize?: string;
     alignment?: string;
     color?: string;
     textTransform?: string;
-    fontWeight?: string;
     lineHeight?: string;
 }
 

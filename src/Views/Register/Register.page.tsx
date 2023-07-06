@@ -7,13 +7,13 @@ import {Button, Heading, Link, TextInput} from 'src/Components';
 import {RegisterValidationSchema} from 'src/Schemas';
 import {FontWeight, LineHeight, Sizes} from 'src/Styles/Theme';
 import {fakeAsync} from 'src/Helpers';
-import {FakeRegisterPayload} from 'src/Helpers/_fakeAsync.helper';
+import {FakeLoginResponse, FakeRegisterPayload} from 'src/Helpers/_fakeAsync.helper';
 import {useAuthContext} from 'src/Hooks';
 import {AuthState} from 'src/Redux/features/auth/authSlice.ts';
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const {userId} = useSelector((state: AuthState) => state.auth);
+  const {userId} = useSelector((state: { auth: AuthState }) => state.auth);
   const {login} = useAuthContext();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,13 +23,15 @@ const Register: React.FC = () => {
 
 
   const handleSubmitRegister = (payload: FakeRegisterPayload) => {
-    fakeAsync({
-      asyncType: 'login', payload
-    }).then(({accessToken, refreshToken}) => {
-      login({
-        accessToken,
-        refreshToken,
-      });
+    fakeAsync({asyncType: 'login', payload}).then((answer) => {
+      const {accessToken, refreshToken} = answer as FakeLoginResponse;
+
+      if (accessToken && refreshToken) {
+        login({
+          accessToken,
+          refreshToken,
+        });
+      }
     });
   };
 
@@ -42,12 +44,7 @@ const Register: React.FC = () => {
       repeatPassword: '',
     },
     validationSchema: RegisterValidationSchema,
-    onSubmit: ({
-      firstName,
-      lastName,
-      email,
-      password,
-    }) => {
+    onSubmit: ({firstName, lastName, email, password}) => {
       handleSubmitRegister({
         firstName,
         lastName,
@@ -56,6 +53,7 @@ const Register: React.FC = () => {
       });
     },
   });
+
 
   useEffect(() => {
     if (userId) {
@@ -133,7 +131,6 @@ const Register: React.FC = () => {
               <div>
                 <Button
                   type='submit'
-                  disabled={false}
                   isFullWidth={false}
                 >
                   <span>Register</span>

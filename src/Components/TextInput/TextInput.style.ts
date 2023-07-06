@@ -19,8 +19,10 @@ export const StyledInputWrapper = styled.div<StyledInputWrapperProps>`
 `;
 
 interface StyledTextareaProps {
+    type?: string;
     fontSize?: string;
     hasSuffixIcon?: boolean;
+    multiline?: boolean;
 }
 
 export const StyledTextarea = styled.textarea<StyledTextareaProps>`
@@ -60,6 +62,7 @@ export const StyledTextarea = styled.textarea<StyledTextareaProps>`
 interface StyledInputProps {
     fontSize?: string;
     hasSuffixIcon?: boolean;
+    multiline?: boolean;
 }
 
 export const StyledInput = styled.input<StyledInputProps>`
@@ -96,7 +99,11 @@ export const StyledInput = styled.input<StyledInputProps>`
   }
 `;
 
-export const StyledLabel = styled.label`
+interface StyledLabelProps {
+    disabled?: boolean;
+}
+
+export const StyledLabel = styled.label<StyledLabelProps>`
   font-family: 'Plus Jakarta Sans';
   font-style: normal;
   font-weight: ${FontWeight.medium};

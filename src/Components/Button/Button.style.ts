@@ -5,6 +5,8 @@ import {
 
 interface StyledButtonProps {
     isFullWidth?: boolean;
+    as?: string;
+    href?: string;
 }
 
 export const StyledButtonLarge = styled.button<StyledButtonProps>`

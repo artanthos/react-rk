@@ -1,15 +1,13 @@
-import {UserRoleTypes} from 'src/Constants';
-
 interface JwtPayload {
     userId: string | null;
     isAdmin: boolean;
-    roles?: UserRoleTypes[];
+    roles?: string[];
     exp?: number;
     email: string;
 }
 
 const parseJwt = (token: string): JwtPayload => {
-  let jsonPayload = JSON.stringify({userId: null, isAdmin: false});
+  let jsonPayload: string;
 
   try {
     const base64Url = token.split('.')[1];
