@@ -12,7 +12,7 @@ export const setCookie = (name: string, value: string, days = 1): void => {
   document.cookie = `${name}=${value}${expires}; path=/`;
 };
 
-export const retrieveCookie = (name: string): string | null => {
+export const retrieveCookie = (name = ''): string => {
   if (name) {
     const nameEQ = `${name}=`;
     const ca = document.cookie.split(';');
@@ -32,7 +32,7 @@ export const retrieveCookie = (name: string): string | null => {
     }
   }
 
-  return null;
+  return '';
 };
 
 export const deleteCookie = (name: string): void => {

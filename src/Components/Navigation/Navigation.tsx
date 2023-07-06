@@ -1,24 +1,15 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import {
-  Navbar,
-  Nav,
-  NavItem,
-} from 'reactstrap';
+import {NavLink} from 'react-router-dom';
+import {Navbar, Nav, NavItem} from 'reactstrap';
 
-import { useAuthContext } from 'src/Hooks';
-import { parseJWT, retrieveCookie } from 'src/Helpers';
-import { StyledNavigation } from './Navigation.style';
+import {useAuthContext} from 'src/Hooks';
+import {parseJWT, retrieveCookie} from 'src/Helpers';
+import {StyledNavigation} from './Navigation.style';
 
+const Navigation: React.FC = () => {
+  const {isLoggedIn} = useAuthContext();
 
-const Navigation = () => {
-  const {
-    isLoggedIn,
-  } = useAuthContext();
-
-  const {
-    roles,
-  } = parseJWT(retrieveCookie('token'));
+  const {roles} = parseJWT(retrieveCookie('token'));
 
 
   return (
@@ -35,7 +26,7 @@ const Navigation = () => {
                   className='navLink'
                 >
                   <span className='navLinkIcon'>
-                    <i className='bi bi-gradient bi-droplet-half' />
+                    <i className='bi bi-gradient bi-droplet-half'/>
                   </span>
                   {' '}
                   <span className='navLinkText'>Light Aqua</span>

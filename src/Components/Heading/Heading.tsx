@@ -6,7 +6,7 @@ interface HeadingProps {
     fontSize: string;
     alignment?: 'left' | 'center' | 'right';
     textTransform?: 'uppercase' | 'lowercase' | 'capitalize' | 'none';
-    fontWeight?: 300 | 500 | 700;
+    fontWeight: number;
     lineHeight?: string;
     color?: string;
     useVerticalSpacer?: boolean;
@@ -14,6 +14,7 @@ interface HeadingProps {
     withNumbering?: boolean;
     order?: number;
     children: React.ReactNode;
+    className?: string;
 }
 
 const Heading: React.FC<HeadingProps> = ({
@@ -23,10 +24,12 @@ const Heading: React.FC<HeadingProps> = ({
   withNumbering,
   order,
   children,
+  fontWeight,
   ...rest
 }) => (
   <StyledHeading
     as={type}
+    fontWeight={fontWeight}
     {...rest}
   >
     {useVerticalSpacer && <span className='v-spacer me-3'/>}

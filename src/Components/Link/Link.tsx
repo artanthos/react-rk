@@ -3,9 +3,10 @@ import {StyledLink} from './Links.style';
 
 interface LinkProps {
     children: ReactNode;
+    to: string;
 }
 
-const Link = ({children, ...rest}: LinkProps) => (
+const Link: React.FC<LinkProps> = ({children, ...rest}) => (
   <StyledLink {...rest}>{children}</StyledLink>
 );
 

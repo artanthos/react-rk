@@ -1,19 +1,35 @@
-import React, {
-  createContext,
-  useEffect,
-  useReducer,
-  useCallback,
-  useMemo,
-} from 'react';
-import {
-  retrieveCookie,
-  setCookie,
-} from 'src/Helpers';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearToken, setToken } from 'src/Redux/features/auth/authSlice';
-import { RESET_STATE_ACTION_TYPE } from 'src/Redux/actions';
+import React, {createContext, useEffect, useReducer, useCallback, useMemo} from 'react';
+import {retrieveCookie, setCookie} from 'src/Helpers';
+import {useSelector, useDispatch} from 'react-redux';
+import {AuthState, clearToken, setToken} from 'src/Redux/features/auth/authSlice';
+import {RESET_STATE_ACTION_TYPE} from 'src/Redux/actions';
 
-const reducer = (state, action) => {
+interface ContextState {
+    isAuthenticated: boolean;
+    accountRoles: string[];
+    isLoggedIn: boolean;
+}
+
+interface ContextActionPayload {
+    accessToken: string;
+    refreshToken: string
+}
+
+interface AuthContextProps {
+    isAuthenticated: boolean;
+    isLoggedIn: boolean;
+    accountRoles: string[];
+    // eslint-disable-next-line no-unused-vars
+    login: (data: ContextActionPayload) => void;
+}
+
+type ContextAction =
+    | { type: 'INITIAL'; payload: { accountRoles: string[] } }
+    | { type: 'LOGOUT'; payload: { isAuthenticated: boolean } };
+
+// eslint-disable-next-line
+// @ts-ignore
+const reducer = (state: ContextState, action: ContextAction): ContextState => {
   switch (action.type) {
   case 'INITIAL':
     return {
@@ -36,45 +52,44 @@ const reducer = (state, action) => {
   }
 };
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext<AuthContextProps | null>(null);
 
-export function AuthProvider({ children }) {
+export function AuthProvider({children}: { children: React.ReactNode }) {
   const dispatch = useDispatch();
-  const {
-    userId, roles,
-  } = useSelector((stateRtk) => stateRtk.auth);
+  const {userId, roles} = useSelector((state: { auth: AuthState }) => state.auth);
 
   const [state, dispatchContext] = useReducer(reducer, {
-    isAuthenticated: retrieveCookie('token'),
+    isAuthenticated: !!retrieveCookie('token'),
     accountRoles: roles,
-    isLoggedIn: retrieveCookie('token'),
+    isLoggedIn: !!retrieveCookie('token'),
   });
 
   const initialize = useCallback(async () => {
-    if (
-      retrieveCookie('token')
-      && retrieveCookie('refreshToken')
-    ) {
-      dispatch(setToken({
-        accessToken: retrieveCookie('token'),
-        refreshToken: retrieveCookie('refreshToken'),
-      }));
+    if (retrieveCookie('token') && retrieveCookie('refreshToken')) {
+      dispatch(
+        setToken({
+          accessToken: retrieveCookie('token'),
+          refreshToken: retrieveCookie('refreshToken'),
+        })
+      );
     } else {
       dispatch(clearToken());
-      dispatch({ type: RESET_STATE_ACTION_TYPE });
+      dispatch({type: RESET_STATE_ACTION_TYPE});
     }
 
     try {
       if (retrieveCookie('token')) {
-        const isLoggedIn = (!!userId && !!retrieveCookie('token'));
+        const isLoggedIn = !!userId && !!retrieveCookie('token');
 
-        dispatchContext({
-          type: 'INITIAL',
-          payload: {
-            isAuthenticated: isLoggedIn,
-            accountRoles: roles,
-          },
-        });
+        if (isLoggedIn) {
+
+          dispatchContext({
+            type: 'INITIAL',
+            payload: {
+              accountRoles: roles,
+            },
+          });
+        }
       } else {
         dispatchContext({
           type: 'LOGOUT',
@@ -95,31 +110,30 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     initialize();
-  }, [
-    initialize,
-  ]);
+  }, [initialize]);
 
   // LOGIN
-  const login = useCallback(async ({
-    accessToken,
-    refreshToken,
-  }) => {
-    dispatch(setToken({
-      accessToken,
-      refreshToken,
-    }));
+  const login = useCallback(
+    async ({accessToken, refreshToken}: { accessToken: string; refreshToken: string }) => {
+      dispatch(
+        setToken({
+          accessToken,
+          refreshToken,
+        })
+      );
 
-    setCookie('token', accessToken);
-    setCookie('refreshToken', refreshToken);
+      setCookie('token', accessToken);
+      setCookie('refreshToken', refreshToken);
 
-
-    dispatchContext({
-      type: 'INITIAL',
-      payload: {
-        accountRoles: roles,
-      },
-    });
-  }, []);
+      dispatchContext({
+        type: 'INITIAL',
+        payload: {
+          accountRoles: roles,
+        },
+      });
+    },
+    []
+  );
 
   const memoizedValue = useMemo(
     () => ({
@@ -128,11 +142,7 @@ export function AuthProvider({ children }) {
       accountRoles: state.accountRoles,
       login,
     }),
-    [
-      state.isAuthenticated,
-      state.accountRoles,
-      login,
-    ],
+    [state.isAuthenticated, state.accountRoles, login]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

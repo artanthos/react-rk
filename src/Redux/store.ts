@@ -10,20 +10,18 @@ interface RootState {
     errorSlice: ErrorState;
 }
 
-const reducers: RootState = {
+const appReducer: Reducer<RootState> = combineReducers({
   auth: authReducer,
   tasks: tasksReducer,
   errorSlice: errorSliceReducer,
-};
-
-const combinedReducers: Reducer<RootState> = combineReducers(reducers);
+});
 
 const rootReducer: Reducer<RootState> = (state, action) => {
   if (action.type === RESET_STATE_ACTION_TYPE) {
     state = undefined;
   }
 
-  return combinedReducers(state, action);
+  return appReducer(state, action);
 };
 
 const store = configureStore({

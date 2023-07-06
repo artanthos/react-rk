@@ -1,43 +1,41 @@
 import React from 'react';
-import {
-  ModalBody, ModalFooter,
-} from 'reactstrap';
-import { Button, Modal } from 'src/Components/index';
+import {ModalBody, ModalFooter} from 'reactstrap';
+import {Button, Modal} from 'src/Components/index';
 
-const TasksDeleteModal = (props) => {
-  const {
-    task,
-    modalIsOpen,
-    setModalIsOpen,
-    handleDelete,
-  } = props;
+interface Task {
+    title: string;
+    createDate: string;
+}
 
+interface TasksDeleteModalProps {
+    task: Task;
+    modalIsOpen: boolean;
+    // eslint-disable-next-line no-unused-vars
+    setModalIsOpen: (isOpen: boolean) => void;
+    handleDelete: () => void;
+}
+
+const TasksDeleteModal: React.FC<TasksDeleteModalProps> = ({
+  task,
+  modalIsOpen,
+  setModalIsOpen,
+  handleDelete,
+}) => {
   return (
-    <Modal
-      title=''
-      isOpen={modalIsOpen}
-    >
+    <Modal title='' isOpen={modalIsOpen}>
       <ModalBody>
         <p>
-          Are you sure you want to delete this task?
-          <br />
-          <br />
+                    Are you sure you want to delete this task?
+          <br/>
+          <br/>
           <strong>{task.title}</strong>
-          <br />
-          created at:
-          {' '}
-          <strong>{task.createDate}</strong>
-          ?
+          <br/>
+                    created at: <strong>{task.createDate}</strong>?
         </p>
       </ModalBody>
       <ModalFooter>
-        <Button
-          key='yes'
-          size='sm'
-          className=''
-          onClick={handleDelete}
-        >
-          Yes
+        <Button key='yes' size='sm' className='' onClick={handleDelete}>
+                    Yes
         </Button>
 
         <Button
@@ -46,7 +44,7 @@ const TasksDeleteModal = (props) => {
           className=''
           onClick={() => setModalIsOpen(false)}
         >
-          No
+                    No
         </Button>
       </ModalFooter>
     </Modal>

@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 const LoginValidationSchema = yup.object({
   email: yup
-    .string('We need a valid email address')
+    .string()
     .email('We need a valid email address')
     .required('This field is mandatory')
     .max(256, 'Must be max 256 characters'),

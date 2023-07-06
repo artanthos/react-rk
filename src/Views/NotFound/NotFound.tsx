@@ -15,7 +15,7 @@ const NotFound: React.FC<NotFoundProps> = ({shouldRedirect}) => {
     navigate('/');
   };
 
-  if (shouldRedirect === true) {
+  if (shouldRedirect) {
     return (<Navigate to='/not-found'/>);
   }
 

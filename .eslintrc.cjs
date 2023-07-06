@@ -21,6 +21,7 @@ module.exports = {
     },
     plugins: ['react', 'react-hooks', 'react-refresh', 'jsx-a11y'],
     rules: {
+        '@typescript-eslint/no-non-null-assertion': 'off',
         'react-refresh/only-export-components': 'warn',
         'no-unused-vars': 2,
         'react/jsx-no-target-blank': 0,

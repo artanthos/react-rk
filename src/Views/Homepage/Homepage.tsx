@@ -18,12 +18,13 @@ import {formatDate, fakeAsync} from 'src/Helpers';
 import {Sizes, FontWeight, LineHeight} from 'src/Styles/Theme';
 import {deleteTask, hydrateTasks, Task, TasksState} from 'src/Redux/features/tasks/tasksSlice';
 import debounce from 'lodash/debounce';
+import {FakeAllTasksResponse} from 'src/Helpers/_fakeAsync.helper.ts';
 
 const Homepage: React.FC = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const data = useSelector((state: TasksState) => state.tasks.list);
+  const data = useSelector((state: { tasks: TasksState }) => state.tasks.list);
   const {items = []} = data;
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const Homepage: React.FC = () => {
 
   const handleGetAllTasks = useCallback(() => {
     fakeAsync({asyncType: 'getAllTasks', payload: null}).then((answer) => {
-      const {tasks} = answer;
+      const {tasks} = answer as FakeAllTasksResponse;
       dispatch(hydrateTasks({tasks}));
     });
   }, [dispatch]);
@@ -56,10 +57,8 @@ const Homepage: React.FC = () => {
     setSelectedTask(null);
   };
 
-  const handlePrepareDelete = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    setSelectedTask(list.find((row) => row.id === id)!);
+  const handlePrepareDelete = (id: string) => {
+    setSelectedTask(list.find((row) => Number(row.id) === Number(id))!);
     setModalIsOpen(true);
 
     return false;
@@ -71,7 +70,7 @@ const Homepage: React.FC = () => {
 
   const handleSortByDate = ({isAsc}: { isAsc: boolean }) => () => {
     fakeAsync({asyncType: 'sortAscByDate', payload: {isAsc, searchTerm}}).then((answer) => {
-      const {tasks} = answer;
+      const {tasks} = answer as FakeAllTasksResponse;
 
       dispatch(hydrateTasks({tasks}));
     });
@@ -81,7 +80,7 @@ const Homepage: React.FC = () => {
     debounce((title: string) => {
       setSearchTerm(title);
       fakeAsync({asyncType: 'searchForTaskByTitle', payload: {title}}).then((answer) => {
-        const {tasks} = answer;
+        const {tasks} = answer as FakeAllTasksResponse;
         dispatch(hydrateTasks({tasks}));
       });
     }, 500),

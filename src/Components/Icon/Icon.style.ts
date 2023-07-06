@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
-export const StyledIcon = styled.span`
+interface StyledIconProps {
+    size?: number;
+    color?: string;
+    hasShadow?: boolean;
+}
+
+export const StyledIcon = styled.span<StyledIconProps>`
   display: inline-block;
   font-size: ${(props) => props.size}rem;
   line-height: ${(props) => props.size}rem;

@@ -1,4 +1,4 @@
-export type UserRoleTypes = 'ROLE_ADMIN' | 'ROLE_USER';
+export type UserRoleTypes = 'ROLE_ADMIN' | '';
 
 export const lsk = {
   TASKS: 'tasks',

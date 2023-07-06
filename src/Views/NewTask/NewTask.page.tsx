@@ -20,11 +20,16 @@ import {useDispatch} from 'react-redux';
 import {addTask} from 'src/Redux/features/tasks/tasksSlice';
 import {fakeAsync} from 'src/Helpers';
 
-const NewTaskPage = () => {
+interface FormValues {
+    title: string;
+    description: string;
+}
+
+const NewTaskPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleFormSubmit = async (values: { title: string; description: string }) => {
+  const handleFormSubmit = async (values: FormValues) => {
     const {title, description} = values;
 
     fakeAsync({asyncType: 'addTask', payload: {title, description}}).then(() => {
@@ -37,7 +42,7 @@ const NewTaskPage = () => {
     navigate('/');
   };
 
-  const formik = useFormik({
+  const formik = useFormik<FormValues>({
     initialValues: {
       title: '',
       description: '',

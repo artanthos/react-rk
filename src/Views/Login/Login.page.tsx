@@ -9,14 +9,15 @@ import {fakeAsync} from 'src/Helpers';
 import {LoginValidationSchema} from 'src/Schemas';
 import {useAuthContext} from 'src/Hooks';
 import {AuthState} from 'src/Redux/features/auth/authSlice.ts';
+import {FakeLoginResponse} from 'src/Helpers/_fakeAsync.helper.ts';
 
 interface FormValues {
     email: string;
     password: string;
 }
 
-const Login = () => {
-  const {userId} = useSelector((state: AuthState) => state.auth);
+const Login: React.FC = () => {
+  const {userId} = useSelector((state: { auth: AuthState }) => state.auth);
   const location = useLocation();
   const navigate = useNavigate();
   const {login} = useAuthContext();
@@ -25,13 +26,15 @@ const Login = () => {
 
   const handleSubmitLogin = () => {
     setIsLoading(true);
-    fakeAsync({asyncType: 'login', payload: null}).then(({accessToken, refreshToken}) => {
-      setIsLoading(false);
+    fakeAsync({asyncType: 'login', payload: null}).then((answer) => {
+      const {accessToken, refreshToken} = answer as FakeLoginResponse;
 
-      login({
-        accessToken,
-        refreshToken,
-      });
+      if (accessToken && refreshToken) {
+        login({
+          accessToken,
+          refreshToken,
+        });
+      }
     });
   };
 
@@ -41,8 +44,7 @@ const Login = () => {
       password: '',
     },
     validationSchema: LoginValidationSchema,
-    // eslint-disable-next-line
-        onSubmit: ({email, password}) => {
+    onSubmit: () => {
       handleSubmitLogin();
     },
   });
