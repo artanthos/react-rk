@@ -17,6 +17,7 @@
 
 CLI commands
 ---
+- ```npm install``` -- install dependencies
 - ```npm run dev``` -- dev server
 - ```npm run build``` -- build
 - ```npm install -g serve``` -- installs npm serve package
