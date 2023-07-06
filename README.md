@@ -13,3 +13,11 @@
 6. Theme and styles are managed with styled-components and reactstrap.
 
 7. Messages and errors are handled through IntlProvider by the ```react-intl``` library. Not much goes on, given that there are no statuses nor errors to handle.
+
+
+CLI commands
+---
+- ```npm run dev``` -- dev server
+- ```npm run build``` -- build
+- ```npm install -g serve``` -- installs npm serve package
+- ```serve -S dist``` -- runs build with serve npm package
