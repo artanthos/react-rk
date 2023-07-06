@@ -4,11 +4,11 @@
 
 2. JWT and refresh token are both returned from the .env files (see .env.dev, .env.prd and .env.stg).
 
-3. To understand how webpack craco works, read this article I wrote: https://raviolicode.hashnode.dev/how-to-load-custom-env-variables-in-webpack-with-craco
+3. Used Vite + TS + eslint.
 
 4. State management uses RTK, but without the Query async capabilities (hence the ```fakeAsync``` helper). See ```Redux``` folder for the store file and feature slices.
 
-5. Authentication is managed with ```AuthContext``` located in the ```Contexts``` folder. Based on the token, the user is either authenticated or not. The ```AuthContext``` is used to wrap the ```App``` component, and to provide the ```useAuth``` hook to the application. Also, based on the fake but valid token and the role, routes are managed in ```Routes/AppRputes```, with a custom ```RouteGuard``` in place.
+5. Authentication is managed with ```AuthContext``` located in the ```Contexts``` folder. Based on the token, the user is either authenticated or not. The ```AuthContext``` is used to wrap the ```App``` component, and to provide the ```useAuth``` hook to the application. Also, based on the fake but valid token and the role, routes are managed in ```Routes/AppRoutes```, with a custom ```RouteGuard``` in place.
 
 6. Theme and styles are managed with styled-components and reactstrap.
 
